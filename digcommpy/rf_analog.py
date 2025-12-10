@@ -9,7 +9,7 @@ Functions and classes for modeling RF analog blocks and impairments
 
 import numpy as np
 import matplotlib.pyplot as plt
-from rfdsppy import calc, digital_hw_algo as dighw
+from digcommpy import calc, digital_hw_algo as dighw
 import scipy.fft
 import math
 from typing import Literal
@@ -38,11 +38,16 @@ class AWGN:
         self.vrms = calc.dbm2v(power, unit="dBm")*np.sqrt(fs/bw)
 
     def transform(self, x: np.ndarray) -> np.ndarray:
+        # if np.iscomplexobj(x):
+        #     n = self.rng.normal(loc=0, scale=self.vrms/np.sqrt(2), size=x.size) + \
+        #         1j*self.rng.normal(loc=0, scale=self.vrms/np.sqrt(2), size=x.size)
+        # else:
+        #     n = self.rng.normal(loc=0, scale=self.vrms, size=x.size)
         if np.iscomplexobj(x):
-            n = self.rng.normal(loc=0, scale=self.vrms/np.sqrt(2), size=x.size) + \
-                1j*self.rng.normal(loc=0, scale=self.vrms/np.sqrt(2), size=x.size)
+            n = self.rng.normal(loc=0, scale=self.vrms/np.sqrt(2), size=x.shape) + \
+                1j*self.rng.normal(loc=0, scale=self.vrms/np.sqrt(2), size=x.shape)
         else:
-            n = self.rng.normal(loc=0, scale=self.vrms, size=x.size)
+            n = self.rng.normal(loc=0, scale=self.vrms, size=x.shape)
 
         return x + n
 

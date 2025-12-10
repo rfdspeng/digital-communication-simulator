@@ -11,7 +11,7 @@ from typing import Literal
 import numpy as np
 import math
 from scipy import signal
-from rfdsppy import digital_hw_algo as dighw, calc, rf_estimation as rf_est
+from digcommpy import digital_hw_algo as dighw, calc, rf_estimation as rf_est
 import matplotlib.pyplot as plt
 
 # https://pysdr.org/content/pulse_shaping.html

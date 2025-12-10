@@ -9,7 +9,7 @@ Functions to generate tones
 
 import numpy as np
 from fractions import Fraction
-from rfdsppy import calc
+from digcommpy import calc
 from typing import Literal
 
 def tonegen(fs: float, fc: float, cossin: Literal["cos", "sin", "exp"]="cos", theta0: float=0, nsamp: int | float | None=None, power: int | float | None=None):

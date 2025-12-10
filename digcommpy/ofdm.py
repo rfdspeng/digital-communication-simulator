@@ -11,9 +11,9 @@ import numpy as np
 from scipy import signal
 from scipy import fft
 import matplotlib.pyplot as plt
-from rfdsppy import calc
-from rfdsppy.digital_modulation import modulation_mapper
-from rfdsppy import rf_estimation as rf_est
+from digcommpy import calc
+from digcommpy.digital_modulation import modulation_mapper
+from digcommpy import rf_estimation as rf_est
 from typing import Literal
 
 def ofdm_wavgen(nsym: int=14, bw: int=10, scs: int=15, 
