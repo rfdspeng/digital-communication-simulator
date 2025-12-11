@@ -12,6 +12,7 @@ from scipy import fft, signal
 from typing import Literal, Iterable
 import math
 import matplotlib.pyplot as plt
+from digcommpy import rf_analog
 
 class ULA:
 
@@ -77,15 +78,39 @@ class ULABeamform:
 
         return y
     
-def ula_doa(x: np.ndarray, Nr: float | int, theta: float, d: float=0.5, theta_sweep: Iterable | np.ndarray | None=None):
-    if theta_sweep is None:
-        theta_sweep = np.arange(-np.pi, np.pi, 1*np.pi/180)
+# def ula_doa(x: np.ndarray, Nr: float | int, theta: float, d: float=0.5, theta_sweep: Iterable | np.ndarray | None=None):
+#     # Add option for AWGN - fs, bw, power
+#     # Add option to autocalculate AWGN
+
+#     if theta_sweep is None:
+#         # theta_sweep = np.arange(-np.pi, np.pi, 1*np.pi/180)
+#         theta_sweep = np.linspace(-1*np.pi, np.pi, 1000)
     
-    ula = ULA(Nr, theta, d)
+#     ula = ULA(Nr, theta, d)
+#     ula.fit()
+#     X = ula.transform(x.copy())
+
+#     ula_bf = ULABeamform(Nr, 0, d)
+
+#     powers = np.zeros(len(theta_sweep), dtype="float")
+#     for tdx, theta_s in enumerate(theta_sweep):
+#         ula_bf.set_params(theta=theta_s)
+#         ula_bf.fit()
+#         y = ula_bf.transform(X)
+
+#         # powers[tdx] = np.vdot(y, y).real.item()
+#         powers[tdx] = np.var(y)
+    
+#     return (theta_sweep, powers)
+
+def ula_doa(x: np.ndarray, ula: ULA, ula_bf: ULABeamform, awgn: rf_analog.AWGN, theta_sweep: Iterable | np.ndarray | None=None):
+    if theta_sweep is None:
+        # theta_sweep = np.arange(-np.pi, np.pi, 1*np.pi/180)
+        theta_sweep = np.linspace(-1*np.pi, np.pi, 1000)
+    
     ula.fit()
     X = ula.transform(x.copy())
-
-    ula_bf = ULABeamform(Nr, 0, d)
+    X = awgn.transform(X)
 
     powers = np.zeros(len(theta_sweep), dtype="float")
     for tdx, theta_s in enumerate(theta_sweep):
@@ -93,6 +118,9 @@ def ula_doa(x: np.ndarray, Nr: float | int, theta: float, d: float=0.5, theta_sw
         ula_bf.fit()
         y = ula_bf.transform(X)
 
-        powers[tdx] = np.vdot(y, y).real.item()
+        # powers[tdx] = np.vdot(y, y).real.item()
+        powers[tdx] = 10*np.log10(np.var(y))
+    
+    powers -= powers.max()
     
     return (theta_sweep, powers)
