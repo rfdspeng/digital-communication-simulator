@@ -1,5 +1,5 @@
 # digital-communication-simulator
 
-* `rfdsppy`: Custom Python classes and functions for simulating a digital communication system. WIP.  
-* `notebooks`: Jupyter notebooks for testing `rfdsppy` modules.  
+* `digcommpy`: Custom Python classes and functions for simulating a digital communication system. WIP.  
+* `notebooks`: Jupyter notebooks for testing `digcommpy` modules.  
 * `requirements.txt`: Python virtual environment.  

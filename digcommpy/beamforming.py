@@ -103,14 +103,15 @@ class ULABeamform:
     
 #     return (theta_sweep, powers)
 
-def ula_doa(x: np.ndarray, ula: ULA, ula_bf: ULABeamform, awgn: rf_analog.AWGN, theta_sweep: Iterable | np.ndarray | None=None):
+def ula_doa(x: np.ndarray, ula: ULA, ula_bf: ULABeamform, awgn: rf_analog.AWGN | None, theta_sweep: Iterable | np.ndarray | None=None):
     if theta_sweep is None:
         # theta_sweep = np.arange(-np.pi, np.pi, 1*np.pi/180)
         theta_sweep = np.linspace(-1*np.pi, np.pi, 1000)
     
     ula.fit()
     X = ula.transform(x.copy())
-    X = awgn.transform(X)
+    if awgn is not None:
+        X = awgn.transform(X)
 
     powers = np.zeros(len(theta_sweep), dtype="float")
     for tdx, theta_s in enumerate(theta_sweep):
